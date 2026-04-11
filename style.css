@@ -1,3 +1,136 @@
+/* 1. Global Styles & Variables */
+:root {
+  --bg-color: #0f111a; /* Deep midnight background */
+  --card-bg: #1a1d29; /* Slightly lighter card color */
+  --accent-color: #00d2ff; /* Neon blue for episode codes */
+  --text-primary: #f0f0f0; /* Off-white for readability */
+  --text-secondary: #b0b3b8; /* Gray for summaries */
+  --transition: all 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  padding: 40px 20px;
+}
+
+/* 2. Header & Footer */
+header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  letter-spacing: -1px;
+  background: linear-gradient(to right, #00d2ff, #3a7bd5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+footer {
+  text-align: center;
+  margin-top: 60px;
+  padding: 20px;
+  border-top: 1px solid #333;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* 3. The Grid Layout */
 #root {
-  color: red;
+  display: grid;
+  /* Creates a responsive grid that fits as many columns as possible */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 4. The Episode Card */
+.episode-card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid #2a2d3e;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Hover Effect: Card lifts and border glows */
+.episode-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-color);
+  box-shadow: 0 15px 40px rgba(0, 210, 255, 0.15);
+}
+
+/* 5. Card Content Styles */
+.episode-card h2 {
+  font-size: 1.1rem;
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #2a2d3e;
+}
+
+/* Styling the S01E01 part specifically if you want (requires a span in JS) 
+   Otherwise, this just colors the whole title */
+.episode-card h2 {
+  color: #fff;
+}
+
+.episode-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Ensures images aren't squashed */
+  filter: brightness(0.9);
+  transition: var(--transition);
+}
+
+.episode-card:hover img {
+  filter: brightness(1.1);
+}
+
+.episode-summary {
+  padding: 20px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  flex-grow: 1; /* Ensures buttons/footers align if cards are different heights */
+}
+
+/* Custom Scrollbar for a truly clean look */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
 }
