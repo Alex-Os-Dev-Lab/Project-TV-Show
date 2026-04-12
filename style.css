@@ -17,7 +17,7 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
-  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Tahoma", "Verdana", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.6;
   padding: 40px 20px;
 }
