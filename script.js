@@ -11,7 +11,7 @@ function makePageForEpisodes(episodeList) {
 
   // 2. Loop through every episode in the array
   episodeList.forEach((episode) => {
-    // 3. Create a container <div> for this specific episode
+    // 3. Create a container <div> for specific episode
     const episodeCard = document.createElement("div");
     episodeCard.classList.add("episode-card");
 
@@ -30,7 +30,6 @@ function makePageForEpisodes(episodeList) {
     image.alt = episode.name;
 
     // 7. Create the Summary element
-    // Note: We use innerHTML here because the API summary contains <p> tags
     const summary = document.createElement("div");
     summary.innerHTML = episode.summary;
 
@@ -39,7 +38,7 @@ function makePageForEpisodes(episodeList) {
     episodeCard.appendChild(image);
     episodeCard.appendChild(summary);
 
-    // 9. Finally, add the finished card into the root element
+    // 9. add the finished card into the root element
     rootElem.appendChild(episodeCard);
   });
 }
