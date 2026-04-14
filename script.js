@@ -48,7 +48,7 @@ function makePageForEpisodes(episodeList) {
 
 // adding searchbox
 function makeSearch(episodeList) {
-  const searchInput = document.getElementById("search");
+  const searchInput = document.getElementById("search-input");
   
   //input event listener responds at every keystroke
   searchInput.addEventListener("input", () => {
