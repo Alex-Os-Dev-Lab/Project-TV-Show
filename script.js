@@ -4,13 +4,38 @@
 let allEpisodes = [];
 
 /**
- * Initializes the application when the page loads.
- * Fetches all episodes, displays them in a gallery, and sets up search functionality.
+ * Initializes the application by fetching live data from the API.
+ * Handles loading states and errors for the user.
  */
-function setup() {
-  const allEpisodes = getAllEpisodes();
-  renderEpisodeGallery(allEpisodes);
-  setupSearch();
+async function setup() {
+  const rootElem = document.getElementById("root");
+
+  try {
+    // Requirement #2 & #3: Fetch URL once per visit
+    const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
+
+    // Check if the response was successful
+    if (!response.ok) {
+      throw new Error(
+        `Failed to load: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    // Update global variable (Shadowing fixed: removed 'const' here)
+    allEpisodes = await response.json();
+
+    // Requirement #4: Once data arrives, renderEpisodeGallery clears the loading message
+    renderEpisodeGallery(allEpisodes);
+    setupSearch();
+  } catch (error) {
+    // Requirement #5: Notify the user of errors in the UI
+    rootElem.innerHTML = `
+      <div class="error-container">
+        <p class="error-message">⚠️ Sorry, we couldn't load the episodes.</p>
+        <p class="error-details">${error.message}</p>
+        <button onclick="location.reload()">Try Again</button>
+      </div>`;
+  }
 }
 
 /**
