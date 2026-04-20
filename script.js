@@ -2,6 +2,8 @@
 function setup() {
   const allEpisodes = getAllEpisodes();
   makePageForEpisodes(allEpisodes);
+  // Adding event listener for search input
+  makeSearch(allEpisodes);
 }
 
 function makePageForEpisodes(episodeList) {
@@ -40,6 +42,33 @@ function makePageForEpisodes(episodeList) {
 
     // 9. add the finished card into the root element
     rootElem.appendChild(episodeCard);
+  });
+}
+
+// adding searchbox
+function makeSearch(episodeList) {
+  const searchInput = document.getElementById("search-input");
+  
+  //input event listener responds at every keystroke
+  searchInput.addEventListener("input", () => {
+    //make the search case insensitive
+    const searchTerm = searchInput.value.toLowerCase();
+    
+    if (searchTerm === "") {
+      makePageForEpisodes(episodeList);
+      document.getElementById("searchCount").textContent = "";
+      return;
+    }
+    
+    const filteredEpisodes = episodeList.filter(episode => 
+      episode.name.toLowerCase().includes(searchTerm) ||
+      episode.summary.toLowerCase().includes(searchTerm)
+    );
+    
+    //count and display number of search results
+    makePageForEpisodes(filteredEpisodes);
+    document.getElementById("searchCount").textContent = 
+      `${filteredEpisodes.length} episode(s) match your search`;
   });
 }
 
