@@ -53,7 +53,7 @@ footer a:hover {
   text-decoration: underline;
 }
 
-/* 3. Grid Layout */
+/* 3. The Grid Layout */
 #root {
   display: grid;
   /* Creates a responsive grid that fits as many columns as possible */
@@ -95,6 +95,8 @@ footer a:hover {
   border-bottom: 1px solid #2a2d3e;
 }
 
+/* Styling the S01E01 part specifically if you want (requires a span in JS) 
+   Otherwise, this just colors the whole title */
 .episode-card h2 {
   color: #fff;
 }
@@ -102,7 +104,7 @@ footer a:hover {
 .episode-card img {
   width: 100%;
   height: 200px;
-  object-fit: cover; /* Ensure images aren't squashed */
+  object-fit: cover; /* Ensures images aren't squashed */
   filter: brightness(0.9);
   transition: var(--transition);
 }
@@ -115,10 +117,10 @@ footer a:hover {
   padding: 20px;
   color: var(--text-secondary);
   font-size: 0.95rem;
-  flex-grow: 1; /* Ensure buttons/footers align if cards are different heights */
+  flex-grow: 1; /* Ensures buttons/footers align if cards are different heights */
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar for a truly clean look */
 ::-webkit-scrollbar {
   width: 10px;
 }
