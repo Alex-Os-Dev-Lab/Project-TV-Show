@@ -95,8 +95,6 @@ footer a:hover {
   border-bottom: 1px solid #2a2d3e;
 }
 
-/* Styling the S01E01 part specifically if you want (requires a span in JS) 
-   Otherwise, this just colors the whole title */
 .episode-card h2 {
   color: #fff;
 }
@@ -120,7 +118,7 @@ footer a:hover {
   flex-grow: 1; /* Ensures buttons/footers align if cards are different heights */
 }
 
-/* Custom Scrollbar for a truly clean look */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
