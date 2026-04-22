@@ -109,10 +109,15 @@ function createEpisodeCard(episode) {
   const episodeCard = document.createElement("div");
   episodeCard.classList.add("episode-card");
   const episodeCode = formatEpisodeCode(episode);
+
+  const imageSrc = episode.image
+    ? episode.image.medium
+    : "https://via.placeholder.com/210x295?text=No+Image";
+
   episodeCard.innerHTML = `
     <h2>${episode.name} - ${episodeCode}</h2>
-    <img src="${episode.image.medium}" alt="${episode.name}" />
-    <div class="episode-summary">${episode.summary}</div>
+    <img src="${imageSrc}" alt="${episode.name}" />
+    <div class="episode-summary">${episode.summary || "No summary available."}</div>
   `;
   return episodeCard;
 }
