@@ -82,10 +82,16 @@ async function loadEpisodesForShow(showId) {
   // repopulate episode selector with new show's episodes
   const episodeSelect = document.getElementById("episode-select");
   episodeSelect.innerHTML = '<option value="">-- Select an episode --</option>';
-  makeSelector(allEpisodes);
-
-  renderEpisodeGallery(allEpisodes);
-  setupSearch();
+  
+  allEpisodes.forEach((episode) => {
+    const paddedSeason = String(episode.season).padStart(2, "0");
+    const paddedNumber = String(episode.number).padStart(2, "0");
+    const code = `S${paddedSeason}E${paddedNumber}`;
+    const option = document.createElement("option");
+    option.value = code;
+    option.textContent = `${code} - ${episode.name}`;
+    episodeSelect.appendChild(option);
+  });
 }
 
 window.onload = setup;
