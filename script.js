@@ -98,3 +98,46 @@ async function loadEpisodesForShow(showId) {
 }
 
 window.onload = setup;
+
+function formatEpisodeCode(episode) {
+  const paddedSeason = episode.season.toString().padStart(2, "0");
+  const paddedNumber = episode.number.toString().padStart(2, "0");
+  return `S${paddedSeason}E${paddedNumber}`;
+}
+
+function createEpisodeCard(episode) {
+  const episodeCard = document.createElement("div");
+  episodeCard.classList.add("episode-card");
+  const episodeCode = formatEpisodeCode(episode);
+  episodeCard.innerHTML = `
+    <h2>${episode.name} - ${episodeCode}</h2>
+    <img src="${episode.image.medium}" alt="${episode.name}" />
+    <div class="episode-summary">${episode.summary}</div>
+  `;
+  return episodeCard;
+}
+
+function renderEpisodeGallery(episodeList) {
+  const rootElem = document.getElementById("root");
+  rootElem.innerHTML = "";
+  episodeList.forEach((episode) => {
+    const card = createEpisodeCard(episode);
+    rootElem.appendChild(card);
+  });
+}
+
+function setupSearch() {
+  const searchInput = document.getElementById("search-input");
+  const searchCount = document.getElementById("searchCount");
+
+  searchInput.addEventListener("input", () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const filteredEpisodes = allEpisodes.filter(
+      (episode) =>
+        episode.name.toLowerCase().includes(searchTerm) ||
+        episode.summary.toLowerCase().includes(searchTerm),
+    );
+    searchCount.textContent = `Displaying ${filteredEpisodes.length} / ${allEpisodes.length} episodes`;
+    renderEpisodeGallery(filteredEpisodes);
+  });
+}
