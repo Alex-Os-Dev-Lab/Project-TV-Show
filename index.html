@@ -13,9 +13,21 @@
       <h1>TV Show Episodes</h1>
     </header>
 
-    <!-- provision for search bar -->
+    <!-- show selector search bar -->
+    <select id="show-select">
+      <option value="">-- Select a show --</option>
+    </select>
+
+    <!-- episode search bar -->
     <div id="search-bar">
       <input type="text" id="search-input" placeholder="Search episodes..." />
+
+      <!-- adding a pre-filled episode selector -->
+      <select id="episode-select">
+        <option value="">-- Select an episode --</option>
+      </select>
+      <!-- end of episode selector -->
+
       <p id="searchCount"></p>
     </div>
 
