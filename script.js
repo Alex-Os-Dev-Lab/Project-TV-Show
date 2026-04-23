@@ -2,27 +2,41 @@
 const episodeCache = {};
 let allEpisodes = [];
 
-async function setup() {
-  const rootElem = document.getElementById("root");
-  rootElem.textContent = "Loading shows, please wait...";
+// Global cache for shows
+let showsCache = null;
+let allShows = [];
 
+// View management functions
+function showShowsView() {
+  document.getElementById("shows-container").classList.remove("hidden");
+  document.getElementById("episodes-container").classList.add("hidden");
+  document.getElementById("episodes-controls").classList.add("hidden");
+  document.getElementById("nav-bar").classList.add("hidden");
+}
+
+function showEpisodesView() {
+  document.getElementById("shows-container").classList.add("hidden");
+  document.getElementById("episodes-container").classList.remove("hidden");
+  document.getElementById("episodes-controls").classList.remove("hidden");
+  document.getElementById("nav-bar").classList.remove("hidden");
+}
+
+// Initialize the application on page load
+async function setupApplication() {
   try {
-    const response = await fetch("https://api.tvmaze.com/shows");
-
-    if (!response.ok) {
-      throw new Error(`Failed to load shows: ${response.status}`);
-    }
-    const shows = await response.json();
-
-    // requirement 5 - sort alphabetically, case-insensitive
+    const shows = await fetchAllShows();
+    // Sort alphabetically, case-insensitive
     shows.sort((a, b) =>
       a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
     );
-
-    populateShowSelector(shows);
-    rootElem.textContent = "Please select a show above.";
+    allShows = shows;
+    renderShowsListing(shows);
+    setupShowSelector(shows);
+    setupShowSearch(shows);
+    setupBackButton();
+    showShowsView();
   } catch (error) {
-    rootElem.innerHTML = `
+    document.getElementById("shows-container").innerHTML = `
       <div class="error-container">
         <p class="error-message">⚠️ Sorry, we couldn't load the shows.</p>
         <p class="error-details">${error.message}</p>
@@ -30,8 +44,54 @@ async function setup() {
       </div>`;
   }
 }
+// Fetch shows once and cache them (Requirement 6: never fetch the same URL twice)
+async function fetchAllShows() {
+  if (showsCache) return showsCache;
 
-function populateShowSelector(shows) {
+  const response = await fetch("https://api.tvmaze.com/shows");
+  if (!response.ok) {
+    throw new Error(`Failed to load shows: ${response.status}`);
+  }
+  showsCache = await response.json();
+  return showsCache;
+}
+
+// Render all shows as cards
+function renderShowsListing(shows) {
+  const showsContainer = document.getElementById("shows-container");
+  showsContainer.innerHTML = "";
+
+  shows.forEach((show) => {
+    const card = createShowCard(show);
+    showsContainer.appendChild(card);
+  });
+}
+
+// Create a show card element
+function createShowCard(show) {
+  const showCard = document.createElement("div");
+  showCard.classList.add("show-card");
+
+  const imageSrc = show.image ? show.image.original : "";
+
+  showCard.innerHTML = `
+    <h2>${show.name}</h2>
+    ${imageSrc ? `<img src="${imageSrc}" alt="${show.name}" />` : `<p class="no-image">No image available</p>`}
+    <p><strong>Status:</strong> ${show.status || "Unknown"}</p>
+    <p><strong>Rating:</strong> ${show.rating?.average || "N/A"}</p>
+    <p><strong>Runtime:</strong> ${show.runtime || "N/A"} min</p>
+    <p><strong>Genres:</strong> ${show.genres.join(", ") || "Unknown"}</p>
+    <div class="show-summary">${show.summary || "No summary available."}</div>
+  `;
+
+  showCard.addEventListener("click", () => {
+    loadEpisodesForShow(show.id);
+  });
+
+  return showCard;
+}
+
+function setupShowSelector(shows) {
   const showSelect = document.getElementById("show-select");
 
   shows.forEach((show) => {
@@ -48,12 +108,43 @@ function populateShowSelector(shows) {
   });
 }
 
+// Setup show search functionality (filter shows by name, genres, or summary)
+function setupShowSearch(shows) {
+  const showsSearchInput = document.getElementById("shows-search-input");
+
+  showsSearchInput.addEventListener("input", () => {
+    const searchTerm = showsSearchInput.value.toLowerCase();
+    const filteredShows = shows.filter(
+      (show) =>
+        show.name.toLowerCase().includes(searchTerm) ||
+        (show.genres &&
+          show.genres.some((g) => g.toLowerCase().includes(searchTerm))) ||
+        (show.summary && show.summary.toLowerCase().includes(searchTerm)),
+    );
+    // Re-render filtered shows (event listeners are automatically re-attached by createShowCard)
+    renderShowsListing(filteredShows);
+  });
+}
+
+// Setup back button
+function setupBackButton() {
+  const backBtn = document.getElementById("back-btn");
+  backBtn.addEventListener("click", () => {
+    document.getElementById("show-select").value = "";
+    document.getElementById("shows-search-input").value = "";
+    renderShowsListing(allShows);
+    showShowsView();
+  });
+}
+
 async function loadEpisodesForShow(showId) {
-  const rootElem = document.getElementById("root");
+  const episodesContainer = document.getElementById("episodes-container");
+  episodesContainer.textContent = "Loading episodes, please wait...";
+
+  showEpisodesView();
 
   // requirement 6 - use cache if already fetched
   if (!episodeCache[showId]) {
-    rootElem.textContent = "Loading episodes, please wait...";
     try {
       const response = await fetch(
         `https://api.tvmaze.com/shows/${showId}/episodes`,
@@ -63,7 +154,7 @@ async function loadEpisodesForShow(showId) {
       }
       episodeCache[showId] = await response.json();
     } catch (error) {
-      rootElem.innerHTML = `
+      episodesContainer.innerHTML = `
         <div class="error-container">
           <p class="error-message">⚠️ Sorry, we couldn't load the episodes.</p>
           <p class="error-details">${error.message}</p>
@@ -97,7 +188,7 @@ async function loadEpisodesForShow(showId) {
   setupSearch();
 }
 
-window.onload = setup;
+window.onload = setupApplication;
 
 function formatEpisodeCode(episode) {
   const paddedSeason = episode.season.toString().padStart(2, "0");
@@ -120,11 +211,11 @@ function createEpisodeCard(episode) {
   return episodeCard;
 }
 function renderEpisodeGallery(episodeList) {
-  const rootElem = document.getElementById("root");
-  rootElem.innerHTML = "";
+  const episodesContainer = document.getElementById("episodes-container");
+  episodesContainer.innerHTML = "";
   episodeList.forEach((episode) => {
     const card = createEpisodeCard(episode);
-    rootElem.appendChild(card);
+    episodesContainer.appendChild(card);
   });
 }
 

@@ -13,37 +13,38 @@
       <h1>TV Shows</h1>
     </header>
 
-    <!-- Navigation back button -->
-<nav id="nav-bar" class="hidden">
-  <button id="back-btn">← Back to Shows</button>
-</nav>
+    <!-- Navigation back button - hidden by default -->
+    <nav id="nav-bar" class="hidden">
+      <button id="back-btn">← Back to Shows</button>
+    </nav>
 
-    <!-- Wrap show selector in dedicated container -->
-<div id="shows-search-bar">
-  <input type="text" id="shows-search-input" placeholder="Search shows..." />
-  <select id="show-select">
-    <option value="">-- Select a show --</option>
-  </select>
-</div>
+    <!-- Shows search bar - visible on shows view -->
+    <div id="shows-search-bar" class="view">
+      <input
+        type="text"
+        id="shows-search-input"
+        placeholder="Search shows..."
+      />
+      <select id="show-select">
+        <option value="">-- Select a show --</option>
+      </select>
+    </div>
 
-    <!-- episode search bar -->
-    <div id="search-bar">
+    <!-- Episodes controls - hidden by default -->
+    <div id="episodes-controls" class="hidden">
       <input type="text" id="search-input" placeholder="Search episodes..." />
-
-      <!-- Place episode controls into episodes-specific container -->
-      <div id="episodes-controls" class="hidden">
-  <div id="search-bar">
-    <input type="text" id="search-input" placeholder="Search episodes..." />
       <select id="episode-select">
         <option value="">-- Select an episode --</option>
       </select>
       <p id="searchCount"></p>
     </div>
-</div>
 
+    <!-- Shows listing container -->
     <div id="shows-container" class="view">
-  <p class="status-message">Loading shows...</p>
-</div>
+      <p class="status-message">Loading shows...</p>
+    </div>
+
+    <!-- Episodes listing container - hidden by default -->
     <div id="episodes-container" class="view hidden">
       <p class="status-message">Loading episodes...</p>
     </div>
