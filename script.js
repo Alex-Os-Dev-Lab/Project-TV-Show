@@ -184,6 +184,25 @@ async function loadEpisodesForShow(showId) {
     episodeSelect.appendChild(option);
   });
 
+  // Listen for changes on the episode dropdown
+  episodeSelect.addEventListener("change", (event) => {
+    const selectedCode = event.target.value;
+    const searchCount = document.getElementById("searchCount");
+
+    if (selectedCode === "") {
+      // If the user selects the default "-- Select an episode --" option, show all
+      renderEpisodeGallery(allEpisodes);
+      searchCount.textContent = `Displaying ${allEpisodes.length} / ${allEpisodes.length} episodes`;
+    } else {
+      // Filter down to the single episode that matches the selected SxxExx code
+      const filteredEpisode = allEpisodes.filter((episode) => {
+        return formatEpisodeCode(episode) === selectedCode;
+      });
+      renderEpisodeGallery(filteredEpisode);
+      searchCount.textContent = `Displaying 1 / ${allEpisodes.length} episodes`;
+    }
+  });
+
   renderEpisodeGallery(allEpisodes);
   setupSearch();
 }
