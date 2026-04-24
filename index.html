@@ -10,28 +10,42 @@
 
   <body>
     <header>
-      <h1>TV Show Episodes</h1>
+      <h1>TV Shows</h1>
     </header>
 
-    <!-- show selector search bar -->
-    <select id="show-select">
-      <option value="">-- Select a show --</option>
-    </select>
+    <!-- Navigation back button - hidden by default -->
+    <nav id="nav-bar" class="hidden">
+      <button id="back-btn">← Back to Shows</button>
+    </nav>
 
-    <!-- episode search bar -->
-    <div id="search-bar">
+    <!-- Shows search bar - visible on shows view -->
+    <div id="shows-search-bar" class="view">
+      <input
+        type="text"
+        id="shows-search-input"
+        placeholder="Search shows..."
+      />
+      <select id="show-select">
+        <option value="">-- Select a show --</option>
+      </select>
+    </div>
+
+    <!-- Episodes controls - hidden by default -->
+    <div id="episodes-controls" class="hidden">
       <input type="text" id="search-input" placeholder="Search episodes..." />
-
-      <!-- adding a pre-filled episode selector -->
       <select id="episode-select">
         <option value="">-- Select an episode --</option>
       </select>
-      <!-- end of episode selector -->
-
       <p id="searchCount"></p>
     </div>
 
-    <div id="root">
+    <!-- Shows listing container -->
+    <div id="shows-container" class="view">
+      <p class="status-message">Loading shows...</p>
+    </div>
+
+    <!-- Episodes listing container - hidden by default -->
+    <div id="episodes-container" class="view hidden">
       <p class="status-message">Loading episodes...</p>
     </div>
 
